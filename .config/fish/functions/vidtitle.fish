@@ -3,7 +3,11 @@ function vidtitle
     set -l deps mkvpropedit exiftool fd
     for d in $deps
         if not type -q $d
-            kdialog --title "System Error" --error "Required command '$d' not found."
+            notify-send \
+                --urgency critical \
+                --icon dialog-error \
+                --hint=string:desktop-entry:org.kde.dolphin \
+                "System Error" "Required command '$d' not found."
             return 1
         end
     end
@@ -18,12 +22,21 @@ function vidtitle
             __process_file "$target"
 
         else
-            kdialog --error "'$target' is not a valid target."
+            notify-send \
+                --urgency=critical \
+                --icon=dialog-error \
+                --hint=string:desktop-entry:org.kde.dolphin \
+                "Error " "'$target' is not a valid target."
             continue
         end
     end
 
-    kdialog --title "Vid Title" --passivepopup "Process finished." 3
+    notify-send \
+        --urgency=normal \
+        --expire-time=3000 \
+        --icon=dialog-information \
+        --hint=string:desktop-entry:org.kde.dolphin \
+        "Vid Title" "Process finished."
 end
 
 # Internal helper function
